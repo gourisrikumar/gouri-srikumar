@@ -49,9 +49,10 @@ def log_in():
 # Check if a row was returned
     if result:
         print("WELCOME BACK")
+        MENU(userid)
     else:
         print("Sorry, user does not exist!!!")
-    main()
+        main()
         
 
 def MENU(user_id):
@@ -66,7 +67,7 @@ def MENU(user_id):
     elif ans == 2:
         EXERCISE(ans,user_id)
     elif ans== 3:
-        REVIEW_TODAY()
+        REVIEW_TODAY(user_id)
     else:
         exit()
         
@@ -88,9 +89,9 @@ def store_users(userid, pin, name, age, gender, height, weight, goal):
 def maintainence(gender, weight, height, age, PAL):
     #calculates maintainence calories based on input
     if gender == "M":
-        BMR = (10 * weight) + (6.25 * height * 100) - (5 * age) + 5
+        BMR = (10 * weight) + (6.25 * height ) - (5 * age) + 5
     else:
-        BMR = (10 * weight) + (6.25 * height * 100) - (5 * age) - 161
+        BMR = (10 * weight) + (6.25 * height) - (5 * age) - 161
     CALORIE_INTAKE = BMR*PAL
     return CALORIE_INTAKE
     print()
@@ -147,7 +148,7 @@ def Lose(CALORIE_INTAKE, weight):
     if weekly_goals == 4:
         CALORIE_INTAKE-= 1100
         days = ((weight - ideal_weight)*1100*7*7)/7700
-    print("Your daily calorie intake according to your goals should be approximately ", CALORIE_INTAKE,".")
+    print("Your daily calorie intake according to your goals should be approximately ", int(CALORIE_INTAKE),".")
     print("You will achieve your ideal weight in", int(days)," days")
     
 
@@ -194,8 +195,8 @@ def NUTRITION(ans,user_id):
     
         # create cursor to execute SQL queries
         mycursor = mydb.cursor()
-        # insert data into "nutritions" table
-        sql = "INSERT INTO nutritions (user_id, food_name, calories, protein, fat, carbs) VALUES (%s, %s, %s, %s, %s, %s)"
+        # insert data into "nutrition" table
+        sql = "INSERT INTO nutrition (user_id, food_name, calories, protein, fat, carbs) VALUES (%s, %s, %s, %s, %s, %s)"
         val = (user_id, food_name, calories, protein, fat, carbs)
         mycursor.execute(sql, val)
         # commit changes to the database
@@ -255,7 +256,7 @@ def EXERCISE(ans,user_id):
     else:
         MENU(user_id)
         
-def REVIEW_TODAY():
+def REVIEW_TODAY(user_id):
     
     from datetime import date
 
@@ -263,7 +264,7 @@ def REVIEW_TODAY():
     today = date.today()
 
 # Prepare a SQL query to get the nutrition data for today
-    query = "SELECT SUM(calories), SUM(protein), SUM(fat), SUM(carbs) FROM nutritions WHERE date = %s"
+    query = "SELECT SUM(calories), SUM(protein), SUM(fat), SUM(carbs) FROM nutrition WHERE date = %s"
     values = (today,)
 
 # Execute the query and retrieve the results
@@ -317,7 +318,13 @@ def REVIEW_TODAY():
 
 # Show the bar chart
     plt.show()
-        
+    print()
+    print()
+    print("Check out your charts for today!!!")
+    print("Thank you for using Calory!")
+    print("See you back soon!")
+
+    
 def exit() :
     
     print("Thank you for using Calory! Hope to see you back soon!")
